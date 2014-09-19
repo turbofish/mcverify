@@ -3,9 +3,8 @@
 Checker base class and various checkers for MCVerify.
 """
 
-import logging
-
-LOG = logging.getLogger('mcverify')
+from log import LOG
+from config import get_param
 
 class Checker(object):
     """
@@ -17,7 +16,6 @@ class Checker(object):
         self.name = self.__class__.__name__
         # }}}
 
-    # pylint: disable=W0613
     def check(self, directory, files):
         """
         The check method does the actual checking. It takes a directory
@@ -112,6 +110,11 @@ class CheckerPath(Checker):
     def check(self, directory, files):
         # {{{
         super(CheckerPath, self).check(directory, files)
+
+        # Get the correct path from the configuration file
+        pattern_str = get_param('patterns', 'path')
+
+        LOG.debug("pattern = %s", pattern_str)
 
         result = True
 

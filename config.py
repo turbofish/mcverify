@@ -5,15 +5,28 @@ Small wrapper around the python ConfigParser module.
 
 import ConfigParser
 
-# pylint: disable=R0903
-class Config(ConfigParser):
-    """
-    A small extension for the ConfigParser class to simplify parsing a
-    configuration file.
-    """
+CONFIG = ConfigParser.ConfigParser()
 
-    def __init__(self):
-        # {{{
-        pass
-        # }}}
+DEFAULTS = {
+        'patterns': {
+            'path' : '\w+ - \d{4}+ - \w+'
+        }
+}
+
+def get_param(section, name):
+    try:
+        param = CONFIG.get(section, name)
+    except ConfigParser.NoOptionError or ConfigParser.NoSectionError:
+        param = None
+
+    if not param:
+        # Do a default lookup
+        try:
+            param = DEFAULTS[section][name]
+        except KeyError:
+            # Parameter is not in defaults
+            LOG.error("Error: Parameter [%s][%s] does not exist", section, name)
+            param = ""
+
+    return param
 
