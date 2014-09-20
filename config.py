@@ -9,7 +9,7 @@ CONFIG = ConfigParser.ConfigParser()
 
 DEFAULTS = {
         'patterns': {
-            'path' : '\w+ - \d{4}+ - \w+'
+            'path' : '(?P<artist>\w+) - (?P<year>\d+) - (?P<album>\w+)'
         }
 }
 

@@ -5,6 +5,7 @@ Checker base class and various checkers for MCVerify.
 
 from log import LOG
 from config import get_param
+import re
 
 class Checker(object):
     """
@@ -114,9 +115,16 @@ class CheckerPath(Checker):
         # Get the correct path from the configuration file
         pattern_str = get_param('patterns', 'path')
 
-        LOG.debug("pattern = %s", pattern_str)
+        pat = re.compile(pattern_str)
 
-        result = True
+        LOG.debug("matching %s with %s",directory,pattern_str)
+        mat = pat.match(directory)
+
+        if mat:
+            result = True
+        else:
+            LOG.warn("Path '%s' does not match pattern '%s'")
+            result = False
 
         return result
         # }}}
